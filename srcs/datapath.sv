@@ -38,7 +38,7 @@ assign A = RF[fld_A];
 assign B = RF[fld_B];
 
 always_comb begin
-    case(alu_op) begin
+    case(alu_op)
         2'b00 : {cy, alu_out} = A+B;
         2'b01 : {cy, alu_out} = A-B;
         2'b01 : begin
@@ -46,7 +46,7 @@ always_comb begin
             alu_out = A^B;
         end
         default : {cy, alu_out} = A+1;
-    end
+    endcase
 end
 
 assign zero = ~(|(alu_out));
