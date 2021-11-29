@@ -6,7 +6,6 @@ module micro(
     output logic [7:0] z_out,
     input  logic       start,
     output logic       done
-
 );
     // signals with datapath    
     logic [2:0] fld_A;

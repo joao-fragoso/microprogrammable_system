@@ -20,7 +20,8 @@ logic [7:0] alu_out;
 logic [7:0] A;
 logic [7:0] B;
 logic [7:0] C;
-logic [7:0] RF[8];
+logic [7:0] RF[8] = '{ default : 'd23 };
+logic s_cy;
 
 always_ff @(posedge clk) begin
     if (ldR_in)
@@ -31,6 +32,10 @@ always_ff @(posedge clk) begin
     
     if (ldRF)
         RF[fld_C] <= C;
+
+    zero <= ~(|(alu_out));
+    neg <= alu_out[7];
+    cy <= s_cy;
 end
 
 assign C = ( selR_in ? R_in :alu_out );
@@ -39,17 +44,15 @@ assign B = RF[fld_B];
 
 always_comb begin
     case(alu_op)
-        2'b00 : {cy, alu_out} = A+B;
-        2'b01 : {cy, alu_out} = A-B;
+        2'b00 : {s_cy, alu_out} = A+B;
+        2'b01 : {s_cy, alu_out} = A-B;
         2'b01 : begin
-            cy = 1'b0;
+            s_cy = 1'b0;
             alu_out = A^B;
         end
-        default : {cy, alu_out} = A+1;
+        default : {s_cy, alu_out} = A+1;
     endcase
 end
 
-assign zero = ~(|(alu_out));
-assign neg = alu_out[7];
 
 endmodule : datapath
